@@ -21,13 +21,13 @@ dependencies:
     - sudo /opt/google-cloud-sdk/bin/gcloud --quiet config set container/cluster $CLUSTER_NAME
     - sudo /opt/google-cloud-sdk/bin/gcloud config set compute/zone ${CLOUDSDK_COMPUTE_ZONE}
     #- sudo /opt/google-cloud-sdk/bin/gcloud --quiet container clusters get-credentials $CLUSTER_NAME
-    - docker build -t us.gcr.io/${PROJECT_NAME}/cci-hello:$CIRCLE_SHA1 .
+    - docker build -t gcr.io/${PROJECT_NAME}/cci-hello:$CIRCLE_SHA1 .
     # Using a separate tag command until Docker 1.10 is available on CircleCI, then we can use two tags in the build command above
-    - docker tag us.gcr.io/${PROJECT_NAME}/cci-hello:$CIRCLE_SHA1 us.gcr.io/${PROJECT_NAME}/cci-hello:latest
+    - docker tag gcr.io/${PROJECT_NAME}/cci-hello:$CIRCLE_SHA1 gcr.io/${PROJECT_NAME}/cci-hello:latest
 
 test:
   post:
-    - docker run -d -p 3000:3000 -e "SECRET_KEY_BASE=abcd1234" us.gcr.io/${PROJECT_NAME}/cci-hello:$CIRCLE_SHA1; sleep 10
+    - docker run -d -p 3000:3000 -e "SECRET_KEY_BASE=abcd1234" gcr.io/${PROJECT_NAME}/cci-hello:$CIRCLE_SHA1; sleep 10
     - curl --retry 10 --retry-delay 5 -v http://localhost:3000
 
 deployment:
@@ -35,5 +35,5 @@ deployment:
     branch: master
     commands:
       #- ./deploy.sh
-      - sudo /opt/google-cloud-sdk/bin/gcloud docker -- push us.gcr.io/${PROJECT_NAME}/cci-hello:$CIRCLE_SHA1
+      - sudo /opt/google-cloud-sdk/bin/gcloud docker -- push gcr.io/${PROJECT_NAME}/cci-hello:$CIRCLE_SHA1
       - echo "real deploy.sh to k8s coming soon"

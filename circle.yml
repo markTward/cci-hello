@@ -31,10 +31,9 @@ test:
     - curl --retry 10 --retry-delay 5 -v http://localhost:3000
 
 deployment:
-  pre:
-    - sudo /opt/google-cloud-sdk/bin/gcloud docker -- push us.gcr.io/${PROJECT_NAME}/cci-hello:$CIRCLE_SHA1
   prod:
     branch: master
     commands:
       #- ./deploy.sh
+      - sudo /opt/google-cloud-sdk/bin/gcloud docker -- push us.gcr.io/${PROJECT_NAME}/cci-hello:$CIRCLE_SHA1
       - echo "real deploy.sh to k8s coming soon"

@@ -1,8 +1,8 @@
 machine:
-  pre:
-    - wget -O /tmp/install-circleci-docker.sh "https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh"
-    - cat /tmp/install-circleci-docker.sh
-    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
+#  pre:
+#    - wget -O /tmp/install-circleci-docker.sh "https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh"
+#    - cat /tmp/install-circleci-docker.sh
+#    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
   environment:
     PROJECT_NAME: k8sdemo
     CLUSTER_NAME: k0
@@ -10,6 +10,8 @@ machine:
     DEBIAN_FRONTEND: noninteractive
   services:
     - docker
+  post:
+    - docker version
 
 dependencies:
   pre:

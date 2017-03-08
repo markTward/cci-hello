@@ -2,7 +2,7 @@ machine:
   pre:
     - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
   environment:
-    PROJECT_NAME: k8sdemo
+    PROJECT_NAME: k8sdemo-159622
     CLUSTER_NAME: k0
     CLOUDSDK_COMPUTE_ZONE: us-west1-a
     DEBIAN_FRONTEND: noninteractive
@@ -35,5 +35,6 @@ deployment:
     branch: master
     commands:
       #- ./deploy.sh
+      - sudo /opt/google-cloud-sdk/bin/gcloud auth list
       - sudo /opt/google-cloud-sdk/bin/gcloud docker -- push gcr.io/${PROJECT_NAME}/cci-hello:$CIRCLE_SHA1
       - echo "real deploy.sh to k8s coming soon"

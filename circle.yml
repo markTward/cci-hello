@@ -32,7 +32,7 @@ test:
 
 deployment:
   pre:
-    sudo /opt/google-cloud-sdk/bin/gcloud docker -- push us.gcr.io/${PROJECT_NAME}/cci-hello:$CIRCLE_SHA1
+    - sudo /opt/google-cloud-sdk/bin/gcloud docker -- push us.gcr.io/${PROJECT_NAME}/cci-hello:$CIRCLE_SHA1
   prod:
     branch: master
     commands:

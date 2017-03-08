@@ -1,4 +1,4 @@
-FROM phusion/passenger-ruby21:0.9.10
+FROM phusion/passenger-ruby21:0.9.20
 
 EXPOSE 3000
 

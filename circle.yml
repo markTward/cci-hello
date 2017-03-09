@@ -38,5 +38,5 @@ deployment:
       - sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file ${HOME}/gcloud-acct-k8s-auth.json
       - sudo /opt/google-cloud-sdk/bin/gcloud --quiet container clusters get-credentials $CLUSTER_NAME
       - which kubectl
-      - kubectl create namespace cci-k8s-test
-      - kubectl get namespace
+      - sudo /opt/google-cloud-sdk/bin/kubectl create namespace cci-k8s-test
+      - sudo /opt/google-cloud-sdk/bin/kubectl get namespace

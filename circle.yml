@@ -20,7 +20,6 @@ dependencies:
     - sudo /opt/google-cloud-sdk/bin/gcloud config set project $PROJECT_NAME
     - sudo /opt/google-cloud-sdk/bin/gcloud --quiet config set container/cluster $CLUSTER_NAME
     - sudo /opt/google-cloud-sdk/bin/gcloud config set compute/zone ${CLOUDSDK_COMPUTE_ZONE}
-    #- sudo /opt/google-cloud-sdk/bin/gcloud --quiet container clusters get-credentials $CLUSTER_NAME
     - docker build -t gcr.io/${PROJECT_NAME}/cci-hello:$CIRCLE_SHA1 .
     # Using a separate tag command until Docker 1.10 is available on CircleCI, then we can use two tags in the build command above
     - docker tag gcr.io/${PROJECT_NAME}/cci-hello:$CIRCLE_SHA1 gcr.io/${PROJECT_NAME}/cci-hello:latest
@@ -29,12 +28,15 @@ test:
   post:
     - docker run -d -p 3000:3000 -e "SECRET_KEY_BASE=abcd1234" gcr.io/${PROJECT_NAME}/cci-hello:$CIRCLE_SHA1; sleep 10
     - curl --retry 10 --retry-delay 5 -v http://localhost:3000
+    - sudo /opt/google-cloud-sdk/bin/gcloud docker -- push gcr.io/${PROJECT_NAME}/cci-hello:$CIRCLE_SHA1
 
 deployment:
   prod:
     branch: master
     commands:
-      #- ./deploy.sh
-      - sudo /opt/google-cloud-sdk/bin/gcloud auth list
-      - sudo /opt/google-cloud-sdk/bin/gcloud docker -- push gcr.io/${PROJECT_NAME}/cci-hello:$CIRCLE_SHA1
-      - echo "real deploy.sh to k8s coming soon"
+      - echo $GCLOUD_ACCT_K8S_AUTH | base64 --decode -i > ${HOME}/gcloud-acct-k8s-auth.json
+      - sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file ${HOME}/gcloud-acct-k8s-auth.json
+      - sudo /opt/google-cloud-sdk/bin/gcloud --quiet container clusters get-credentials $CLUSTER_NAME
+      - which kubectl
+      - kubectl create namespace cci-k8s-test
+      - kubectl get namespace

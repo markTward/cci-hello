@@ -6,6 +6,7 @@ machine:
     CLUSTER_NAME: k0
     CLOUDSDK_COMPUTE_ZONE: us-west1-a
     DEBIAN_FRONTEND: noninteractive
+    GOOGLE_APPLICATION_CREDENTIALS: ${HOME}/gcloud-acct-k8s-auth.json
   services:
     - docker
   post:

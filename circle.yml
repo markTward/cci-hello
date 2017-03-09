@@ -35,10 +35,8 @@ deployment:
     branch: master
     commands:
       - echo $GCLOUD_ACCT_K8S_AUTH | base64 --decode -i > ${HOME}/gcloud-acct-k8s-auth.json
-      - export GOOGLE_APPLICATION_CREDENTIALS=${HOME}/gcloud-acct-k8s-auth.json
-      - sudo /opt/google-cloud-sdk/bin/gcloud auth application-default login
-      #- sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file ${HOME}/gcloud-acct-k8s-auth.json
+      - sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file ${HOME}/gcloud-acct-k8s-auth.json
       - sudo /opt/google-cloud-sdk/bin/gcloud --quiet container clusters get-credentials $CLUSTER_NAME
-      - which kubectl
-      - sudo /opt/google-cloud-sdk/bin/kubectl create namespace cci-k8s-test
-      - sudo /opt/google-cloud-sdk/bin/kubectl get namespace
+      - sudo chown -R ubuntu:ubuntu /home/ubuntu/.kube
+      - kubectl create namespace cci-k8s-test
+      - kubectl get namespace
